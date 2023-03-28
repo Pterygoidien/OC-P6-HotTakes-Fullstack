@@ -28,6 +28,5 @@ services:
       - ./frontend/src:/usr/src/app/src
     depends_on:
       - backend
-
 volumes:
   data:

@@ -109,12 +109,9 @@ const updateSauce = asyncHandler(async (req, res) => {
         success: false,
         message: "Cette sauce n'a pas été trouvée dans notre base de donnée. "
     })
-    if (!req.body) return res.status(400).json({
-        success: false,
-        message: "Aucune sauce n'a été trouvée",
-        body: req.body
-    })
-
+    //Si il y a une nouvelle image, alors le format de req.body est différent : on a d'un côté l'object {sauce}, et l'autre {image}. Il faudra alors vérifier la présence d'un fichier envoyé via le multer
+    const sauceBody = req.file ? { ...JSON.parse(req.body.sauce), imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` } : { ...JSON.parse(req.body) };
+    //On vérifie que l'utilisateur est bien le créateur de la sauce
     if (!req.user || sauce.userId.toString() !== req.user._id.toString()) return res.status(401).json({
         success: false,
         message: "Vous n'êtes pas autorisé à modifier cette sauce",
@@ -123,7 +120,7 @@ const updateSauce = asyncHandler(async (req, res) => {
     })
 
     try {
-        const updatedSauce = await sauceService.updateSauce(req.params.id, { ...JSON.parse(req.body) });
+        const updatedSauce = await sauceService.updateSauce(req.params.id, sauceBody);
         res.status(200).json({
             success: true,
             message: "Sauce modifiée avec succès",
@@ -135,7 +132,45 @@ const updateSauce = asyncHandler(async (req, res) => {
             message: "Erreur serveur",
         })
     }
+})
 
+/**
+ * @desc   Delete a Sauce
+ * @route  DELETE /api/sauces/:id
+ * @access Private
+ * @param  {String} id
+ * @return {Object} sauce
+ * @todo   Delete image from server
+ * 
+ */
+const deleteSauce = asyncHandler(async (req, res) => {
+    const sauce = await sauceService.getSauceById(req.params.id);
+    if (!sauce) return res.status(404).json({
+        success: false,
+        message: "Cette sauce n'a pas été trouvée dans notre base de donnée. "
+    })
+    //On vérifie que l'utilisateur est bien le créateur de la sauce
+    if (!req.user || sauce.userId.toString() !== req.user._id.toString()) return res.status(401).json({
+        success: false,
+        message: "Vous n'êtes pas autorisé à supprimer cette sauce",
+        createdBy: sauce.userId,
+        user: req.user._id
+    })
+
+    try {
+        const deletedSauce = await sauceService.deleteSauce(req.params.id);
+        res.status(200).json({
+            success: true,
+            message: "Sauce supprimée avec succès",
+            sauce
+        })
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Erreur serveur",
+        })
+    }
 
 
 })
@@ -145,5 +180,6 @@ module.exports = {
     getAllSauces,
     getSauceById,
     createSauce,
-    updateSauce
+    updateSauce,
+    deleteSauce
 }

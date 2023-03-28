@@ -42,6 +42,15 @@ const updateSauce = async (id, sauce) => {
     }
 }
 
+const deleteSauce = async (id) => {
+    try {
+        const deletedSauce = await Sauce.findByIdAndDelete(id);
+        return deletedSauce;
+    }
+    catch (error) {
+        throw error;
+    }
+}
 
 
 
@@ -49,7 +58,8 @@ module.exports = {
     createSauce,
     getAllSauces,
     getSauceById,
-    updateSauce
+    updateSauce,
+    deleteSauce
 
 
 }

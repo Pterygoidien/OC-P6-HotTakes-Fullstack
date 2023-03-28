@@ -57,5 +57,6 @@ sauceSchema.virtual("likes").get(function () {
 sauceSchema.virtual("dislikes").get(function () {
   return this.usersDisliked.length;
 });
+sauceSchema.set("toJSON", { virtuals: true });
 
 module.exports = Sauce = mongoose.model("Sauce", sauceSchema);
