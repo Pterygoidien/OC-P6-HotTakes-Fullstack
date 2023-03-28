@@ -7,7 +7,7 @@
 const { findUserByEmail, validateEmail, createUsers, comparePassword, generateToken } = require('../services/auth.services');
 /**
  * @desc    Sign in an existing user
- * @route   POST /api/login
+ * @route   POST /api/auth/login
  * @access  Public
  */
 const login = async (req, res) => {
@@ -41,7 +41,7 @@ const login = async (req, res) => {
 }
 /**
  * @desc    Register new user
- * @route   POST /api/signup
+ * @route   POST /api/auth/signup
  * @access  Public
  */
 const signUp = async (req, res) => {

@@ -1,13 +1,9 @@
 const express = require('express');
 const router = express.Router();
-
+const sauceController = require('../controllers/sauce.controller');
 router.route('/')
-    .get((req, res) => {
-        res.send('Got a GET request');
-    })
-    .post((req, res) => {
-        res.send('Got a POST request');
-    })
+    .get(sauceController.getAllSauces)
+    .post(sauceController.createSauce)
 router.route('/:id')
     .get((req, res) => {
         res.send('Got a GET request at /user/:id');
