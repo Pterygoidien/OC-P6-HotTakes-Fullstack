@@ -7,14 +7,10 @@ const multer = require('../middleware/multer.middleware');
 
 router.route('/')
     .get(authGuard, sauceController.getAllSauces)
-    .post(authGuard, multer, sauceController.addSauce)
+    .post(authGuard, multer, sauceController.createSauce)
 router.route('/:id')
-    .get((req, res) => {
-        res.send('Got a GET request at /user/:id');
-    })
-    .put((req, res) => {
-        res.send('Got a PUT request at /user/:id');
-    })
+    .get(authGuard, sauceController.getSauceById)
+    .put(authGuard, multer, sauceController.updateSauce)
     .delete((req, res) => {
         res.send('Got a DELETE request at /user/:id');
     })

@@ -66,7 +66,7 @@ const signUp = async (req, res) => {
         })
     }
     try {
-        const user = await authService.createUsers(email, password);
+        const user = await authService.createUser(email, password);
 
         res.status(201).json({
             success: true,

@@ -15,8 +15,6 @@ const verifyToken = (token) => new Promise((resolve, reject) => {
     });
 });
 
-
-
 const hashPassword = async (password) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -24,7 +22,7 @@ const hashPassword = async (password) => {
 }
 
 
-const createUsers = async (email, password) => {
+const createUser = async (email, password) => {
     const hashedPassword = await hashPassword(password);
     const user = new User({
         email,
@@ -56,7 +54,7 @@ const validateEmail = (email) => {
 module.exports = {
     generateToken,
     verifyToken,
-    createUsers,
+    createUser,
     findUserByEmail,
     comparePassword,
     validateEmail, getUserData,

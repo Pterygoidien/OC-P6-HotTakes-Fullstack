@@ -32,13 +32,25 @@ const getSauceById = async (id) => {
     }
 }
 
+const updateSauce = async (id, sauce) => {
+    try {
+        const updatedSauce = await Sauce.findByIdAndUpdate(id, sauce, { new: true });
+        return updatedSauce;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
 
 
 
 module.exports = {
     createSauce,
     getAllSauces,
-    getSauceById
+    getSauceById,
+    updateSauce
+
 
 }
 
