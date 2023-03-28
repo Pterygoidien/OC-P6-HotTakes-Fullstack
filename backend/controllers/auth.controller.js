@@ -4,11 +4,40 @@
  * @version: 1.0
  */
 
-const { findUserByEmail, validateEmail, createUsers } = require('../services/auth.services');
-
+const { findUserByEmail, validateEmail, createUsers, comparePassword, generateToken } = require('../services/auth.services');
+/**
+ * @desc    Sign in an existing user
+ * @route   POST /api/login
+ * @access  Public
+ */
 const login = async (req, res) => {
     const { email, password } = req.body;
-
+    if (!email || !password) {
+        return res.status(400).json({
+            success: false,
+            message: "Veuillez remplir tous les champs"
+        })
+    }
+    const user = await findUserByEmail(email);
+    if (!user) {
+        return res.status(400).json({
+            success: false,
+            message: "L'email n'est pas valide"
+        })
+    }
+    const isMatch = await comparePassword(password, user.password);
+    if (!isMatch) {
+        return res.status(400).json({
+            success: false,
+            message: "Le mot de passe n'est pas valide"
+        })
+    }
+    const token = generateToken(user);
+    res.status(200).json({
+        success: true,
+        userId: user._id,
+        token
+    })
 }
 /**
  * @desc    Register new user
@@ -38,6 +67,7 @@ const signUp = async (req, res) => {
     }
     try {
         const user = await createUsers(email, password);
+
         res.status(201).json({
             success: true,
             message: `Votre compte a bien été créé pour l'addresse ${email}`,
@@ -51,6 +81,9 @@ const signUp = async (req, res) => {
         })
     }
 }
+
+
+
 module.exports = {
     login,
     signUp

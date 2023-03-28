@@ -30,6 +30,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //On importe les routes de sauces et des utilisateurs.
 app.use('/api/auth', require('./routes/auth.route'));
+app.use('/api/sauces', require('./routes/sauce.route'));
 
 //on importe le middleware erreur en dernier pour qu'il soit appelé en dernier.
 app.use(errorMiddleware);
