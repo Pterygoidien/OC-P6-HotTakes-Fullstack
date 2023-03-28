@@ -1,14 +1,14 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
-const asyncHandler = require("express-async-handler");
+
 const jwt = require("jsonwebtoken");
 
 /**
  * @desc    Register new user
- * @route   POST /api/signup
+ * @route   POST /api/auth/signup
  * @access  Public
  */
-const signUp = asyncHandler(async (req, res) => {
+const signUp = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         res.status(400);
@@ -39,14 +39,14 @@ const signUp = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("Une erreur est survenue, veuillez réessayer");
     }
-});
+};
 
 /**
  * @desc    Sign in an existing user
- * @route   POST /api/login
+ * @route   POST /api/auth/login
  * @access  Public
  */
-const logIn = asyncHandler(async (req, res) => {
+const logIn = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -59,7 +59,9 @@ const logIn = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("L'identifiant ou le mot de passe est incorrect");
     }
-});
+};
+
+
 
 /**
  * Private function
@@ -67,8 +69,18 @@ const logIn = asyncHandler(async (req, res) => {
 const generateToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "24h" });
 };
-
+/**
+ * @desc    Show users
+ * @route   GET /api/auth/
+ * @access  Public
+ */
+const showUsers = async (req, res) => {
+    const users = await User.find();
+    res.status(200).json(users);
+}
 module.exports = {
     signUp,
     logIn,
+    showUsers
 };
+

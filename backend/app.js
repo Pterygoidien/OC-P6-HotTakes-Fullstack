@@ -37,9 +37,4 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 // Set our api routes
 app.use("/api/auth", require("./routes/authentication"));
 
-// Catch all other routes and return the index file
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist/index.html"));
-});
-
 module.exports = app;

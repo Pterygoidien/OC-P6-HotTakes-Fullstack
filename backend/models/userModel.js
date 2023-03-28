@@ -7,7 +7,10 @@ const userSchema = mongoose.Schema(
       required: [true, "veuillez ajouter une adresse email correcte"],
       unique: true,
       validate: {
-        validator: validateEmail,
+        validator: value => {
+          const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+          return emailRegex.test(value);
+        },
         message: "L'email n'est pas valide",
       },
     },
@@ -21,10 +24,6 @@ const userSchema = mongoose.Schema(
   }
 );
 
-const validateEmail = value => {
-  const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-  return emailRegex.test(value);
-};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
