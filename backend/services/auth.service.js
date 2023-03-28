@@ -8,18 +8,14 @@ const generateToken = (user) => {
     });
 }
 
-const verifyToken = (
-) => {
-    const bearerHeader = req.headers['authorization'];
-    if (typeof bearerHeader !== 'undefined') {
-        const bearer = bearerHeader.split(' ');
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-    } else {
-        res.sendStatus(403);
-    }
-}
+const verifyToken = (token) => new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) return reject(err);
+        resolve(decoded);
+    });
+});
+
+
 
 const hashPassword = async (password) => {
     const salt = await bcrypt.genSalt(10);
@@ -39,10 +35,15 @@ const createUsers = async (email, password) => {
 };
 
 const findUserByEmail = async (email) => {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('email password');
     return user;
 };
 
+
+const getUserData = async (id) => {
+    const user = await User.findById(id).select('-password');
+    return user;
+}
 
 const comparePassword = (password, userPassword) => {
     return bcrypt.compare(password, userPassword);
@@ -58,5 +59,6 @@ module.exports = {
     createUsers,
     findUserByEmail,
     comparePassword,
-    validateEmail
+    validateEmail, getUserData,
+    verifyToken
 }

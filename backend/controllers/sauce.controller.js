@@ -64,6 +64,7 @@ const getSauceById = asyncHandler(async (req, res) => {
 const createSauce = asyncHandler(async (req, res) => {
     const sauce = JSON.parse(req.body.sauce);
     const newSauce = new Sauce({
+        userId: req.user._id,
         name: sauce.name,
         manufacturer: sauce.manufacturer,
         description: sauce.description,

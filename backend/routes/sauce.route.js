@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const sauceController = require('../controllers/sauce.controller');
-//const auth = require('../middleware/auth.middleware');
+const authGuard = require('../guards/auth.guard');
 const multer = require('../middleware/multer.middleware');
 
 
 router.route('/')
-    .get(sauceController.getAllSauces)
-    .post(multer, sauceController.createSauce)
+    .get(authGuard, sauceController.getAllSauces)
+    .post(authGuard, multer, sauceController.createSauce)
 router.route('/:id')
     .get((req, res) => {
         res.send('Got a GET request at /user/:id');

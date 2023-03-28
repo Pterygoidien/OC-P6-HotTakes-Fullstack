@@ -4,7 +4,7 @@
  * @version: 1.0
  */
 
-const { findUserByEmail, validateEmail, createUsers, comparePassword, generateToken } = require('../services/auth.services');
+const { findUserByEmail, validateEmail, createUsers, comparePassword, generateToken } = require('../services/auth.service');
 /**
  * @desc    Sign in an existing user
  * @route   POST /api/auth/login
