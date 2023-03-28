@@ -1,0 +1,14 @@
+version: '3'
+services:
+  database:
+    image: mongo
+    container_name: database
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_username: root
+      - MONGO_INITDB_ROOT_PASSWORD: w3kj9m9en4xky
+      - MONGO_INITDB_DATABASE: hottake
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 27017:27017
