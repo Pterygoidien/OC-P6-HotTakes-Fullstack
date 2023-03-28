@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
-
+const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 
 /**
@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
  * @route   POST /api/auth/signup
  * @access  Public
  */
-const signUp = async (req, res) => {
+const signUp = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         res.status(400);
@@ -39,14 +39,14 @@ const signUp = async (req, res) => {
         res.status(400);
         throw new Error("Une erreur est survenue, veuillez réessayer");
     }
-};
+});
 
 /**
  * @desc    Sign in an existing user
  * @route   POST /api/auth/login
  * @access  Public
  */
-const logIn = async (req, res) => {
+const logIn = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -59,7 +59,7 @@ const logIn = async (req, res) => {
         res.status(400);
         throw new Error("L'identifiant ou le mot de passe est incorrect");
     }
-};
+});
 
 
 

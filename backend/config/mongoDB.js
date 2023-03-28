@@ -2,8 +2,6 @@ const mongoose = require("mongoose");
 
 
 const mongoDB = async () => {
-
-    console.log(`mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@database:27017/hottake?authSource=admin`);
     try {
         await mongoose.connect(`mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@localhost:27017/hottake?authSource=admin`, {});
         console.log("MongoDB Connected");

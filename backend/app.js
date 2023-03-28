@@ -4,20 +4,13 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoDB = require("./config/mongoDB");
 
-const app = express();
+const { errorHandler } = require("./middleware/errorMiddleware");
 
 //connect to database
 mongoDB();
 
-// Parsers for POST data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+const app = express();
 
-// Point static path to dist
-app.use(express.static(path.join(__dirname, "dist")));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 app.use((req, res, next) => {
@@ -32,9 +25,14 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 // Set our api routes
 app.use("/api/auth", require("./routes/authentication"));
+
+app.use(errorHandler);
 
 module.exports = app;

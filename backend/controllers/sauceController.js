@@ -9,32 +9,32 @@ const User = require("../models/userModel");
  * @route  GET /api/sauces
  * @access Private
  */
-exports.getSauces = asyncHandler(async (req, res) => {
+exports.getSauces = async (req, res) => {
     const sauces = await Sauce.find();
     if (!sauces || sauces.length < 1) {
         res.status(204);
     }
     res.status(200).json(sauces);
-});
+};
 
 /**
  * @desc   Get a specific Sauce, specified by :id
  * @route  GET /api/sauces/:id
  * @access Private
  */
-exports.getSingleSauce = asyncHandler(async (req, res) => {
+exports.getSingleSauce = async (req, res) => {
     const sauce = await Sauce.findOne({ _id: req.params.id });
     res.status(200).json({
         sauce,
     });
-});
+};
 
 /**
  * @desc   Post a new sauc
  * @route  POST /api/sauces
  * @access Private
  */
-exports.addSauce = asyncHandler(async (req, res) => {
+exports.addSauce = async (req, res) => {
     const saucePost = JSON.parse(req.body.sauce);
     const sauce = await Sauce.create({
         ...saucePost,
@@ -43,14 +43,14 @@ exports.addSauce = asyncHandler(async (req, res) => {
     });
 
     res.status(201).json(sauce);
-});
+};
 
 /**
  * @desc   Update an existing sauce, specified by :id
  * @route  PUT /api/sauces/:id
  * @access Private
  */
-exports.updateSauce = asyncHandler(async (req, res) => {
+exports.updateSauce = async (req, res) => {
     const { id } = req.params;
     const sauce = await Sauce.findById(id);
 
@@ -73,14 +73,14 @@ exports.updateSauce = asyncHandler(async (req, res) => {
         new: true,
     });
     res.status(202).send("Sauce modifiée !");
-});
+};
 
 /**
  * @desc   Delete an existing sauce, specified by :id
  * @route  DELETE /api/sauces/:id
  * @access Private
  */
-exports.deleteSauce = asyncHandler(async (req, res) => {
+exports.deleteSauce = async (req, res) => {
     const { id } = req.params;
     const sauce = await Sauce.findById(id);
     console.log(sauce);
@@ -100,9 +100,9 @@ exports.deleteSauce = asyncHandler(async (req, res) => {
 
     await sauce.remove();
     res.status(200).send("Sauce supprimée !");
-});
+};
 
-exports.addLike = asyncHandler(async (req, res) => {
+exports.addLike = async (req, res) => {
     const { id } = req.params;
     const { like, sauceId } = req.body;
 
@@ -157,4 +157,4 @@ exports.addLike = asyncHandler(async (req, res) => {
 
     await Sauce.findByIdAndUpdate(id, { sauceUpdate }, { new: true });
     res.status(200).json({ message: "Like updaté !", sauce });
-});
+};
