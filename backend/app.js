@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const mongoDB = require('./config/mongoDB');
-const { errorMiddleware } = require('./middleware/errorMiddleware');
+const { errorMiddleware } = require('./middleware/error.middleware');
 
 
 //on importe ./config/mongoDB.js qui s'occupe de la connexion à la base de données MongoDB, puis on l'exécute.

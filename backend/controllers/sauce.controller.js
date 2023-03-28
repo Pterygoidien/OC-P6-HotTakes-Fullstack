@@ -62,18 +62,22 @@ const getSauceById = asyncHandler(async (req, res) => {
  * @return {Object} sauce
  */
 const createSauce = asyncHandler(async (req, res) => {
-    try {
-        const sauce = await Sauce.create(req.body);
-        res.status(201).json({
-            success: true,
-            sauce
-        })
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Erreur serveur"
-        })
-    }
+    const sauce = JSON.parse(req.body.sauce);
+    const newSauce = new Sauce({
+        name: sauce.name,
+        manufacturer: sauce.manufacturer,
+        description: sauce.description,
+        mainPepper: sauce.mainPepper,
+        heat: sauce.heat,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    })
+    await newSauce.save();
+
+    res.status(201).json({
+        success: true,
+        message: "Sauce ajoutée avec succès",
+        sauce: newSauce
+    })
 })
 
 module.exports = {
