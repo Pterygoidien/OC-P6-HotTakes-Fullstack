@@ -1,5 +1,6 @@
-const Sauce = require('../models/sauce.model');
 const asyncHandler = require('express-async-handler');
+const UserService = require('../services/sauce.service');
+
 
 
 /**
@@ -10,19 +11,19 @@ const asyncHandler = require('express-async-handler');
  */
 const getAllSauces = asyncHandler(async (req, res) => {
     try {
-        const sauces = await Sauce.find();
+        const sauces = await UserService.getAllSauces();
         if (!sauces || sauces.length < 1) return res.status(404).json({
             success: false,
             message: "Aucune sauce n'a été trouvée"
         })
-        res.status(200).json({
-            success: true,
+        res.status(200).json(
             sauces
-        })
+        )
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Erreur serveur"
+            message: "Erreur serveur",
+            error
         })
     }
 })
@@ -61,7 +62,7 @@ const getSauceById = asyncHandler(async (req, res) => {
  * @param  {String} imageUrl
  * @return {Object} sauce
  */
-const createSauce = asyncHandler(async (req, res) => {
+const addSauce = asyncHandler(async (req, res) => {
     const sauce = JSON.parse(req.body.sauce);
     const newSauce = new Sauce({
         userId: req.user._id,
@@ -84,5 +85,5 @@ const createSauce = asyncHandler(async (req, res) => {
 module.exports = {
     getAllSauces,
     getSauceById,
-    createSauce
+    addSauce
 }

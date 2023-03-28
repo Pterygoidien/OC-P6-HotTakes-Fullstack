@@ -58,5 +58,4 @@ sauceSchema.virtual("dislikes").get(function () {
   return this.usersDisliked.length;
 });
 
-const Sauce = mongoose.model("Sauce", sauceSchema);
-module.exports = Sauce;
+module.exports = Sauce = mongoose.model("Sauce", sauceSchema);

@@ -7,7 +7,7 @@ const multer = require('../middleware/multer.middleware');
 
 router.route('/')
     .get(authGuard, sauceController.getAllSauces)
-    .post(authGuard, multer, sauceController.createSauce)
+    .post(authGuard, multer, sauceController.addSauce)
 router.route('/:id')
     .get((req, res) => {
         res.send('Got a GET request at /user/:id');

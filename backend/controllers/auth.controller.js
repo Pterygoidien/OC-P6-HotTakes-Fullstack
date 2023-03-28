@@ -4,7 +4,7 @@
  * @version: 1.0
  */
 
-const { findUserByEmail, validateEmail, createUsers, comparePassword, generateToken } = require('../services/auth.service');
+const authService = require('../services/auth.service');
 /**
  * @desc    Sign in an existing user
  * @route   POST /api/auth/login
@@ -18,21 +18,21 @@ const login = async (req, res) => {
             message: "Veuillez remplir tous les champs"
         })
     }
-    const user = await findUserByEmail(email);
+    const user = await authService.findUserByEmail(email);
     if (!user) {
         return res.status(400).json({
             success: false,
             message: "L'email n'est pas valide"
         })
     }
-    const isMatch = await comparePassword(password, user.password);
+    const isMatch = await authService.comparePassword(password, user.password);
     if (!isMatch) {
         return res.status(400).json({
             success: false,
             message: "Le mot de passe n'est pas valide"
         })
     }
-    const token = generateToken(user);
+    const token = authService.generateToken(user);
     res.status(200).json({
         success: true,
         userId: user._id,
@@ -52,13 +52,13 @@ const signUp = async (req, res) => {
             message: "Veuillez remplir tous les champs"
         })
     }
-    if (!validateEmail(email)) {
+    if (!authService.validateEmail(email)) {
         return res.status(400).json({
             success: false,
             message: "L'email n'est pas valide"
         })
     }
-    const userAlreadyExists = await findUserByEmail(email);
+    const userAlreadyExists = await authService.findUserByEmail(email);
     if (userAlreadyExists) {
         return res.status(400).json({
             success: false,
@@ -66,7 +66,7 @@ const signUp = async (req, res) => {
         })
     }
     try {
-        const user = await createUsers(email, password);
+        const user = await authService.createUsers(email, password);
 
         res.status(201).json({
             success: true,
