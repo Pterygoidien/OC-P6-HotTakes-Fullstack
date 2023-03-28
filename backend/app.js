@@ -2,8 +2,12 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const mongoDB = require("./config/mongoDB");
 
 const app = express();
+
+//connect to database
+mongoDB();
 
 // Parsers for POST data
 app.use(bodyParser.json());
@@ -31,7 +35,7 @@ app.use((req, res, next) => {
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 // Set our api routes
-app.use("/api", require("./routes/api"));
+
 
 // Catch all other routes and return the index file
 app.get("*", (req, res) => {

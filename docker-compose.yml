@@ -1,14 +1,33 @@
-version: '3'
+version: "3.8"
 services:
   database:
-    image: mongo
-    container_name: database
+    image: 'mongo'
     restart: always
-    environment:
-      - MONGO_INITDB_ROOT_username: root
-      - MONGO_INITDB_ROOT_PASSWORD: w3kj9m9en4xky
-      - MONGO_INITDB_DATABASE: hottake
-    volumes:
-      - ./data:/data/db
     ports:
-      - 27017:27017
+      - '27017:27017'
+    volumes:
+      - data:/data/db
+    env_file:
+      - ./env/mongo.env
+  backend:
+    build: ./backend
+    #  context: ./backend
+    #  dockerfile: Dockerfile
+    #  args:
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./env/backend.env
+    depends_on:
+      - database
+  frontend:
+    build: ./frontend
+    ports:
+      - '4200:4200'
+    volumes:
+      - ./frontend/src:/usr/src/app/src
+    depends_on:
+      - backend
+
+volumes:
+  data:
