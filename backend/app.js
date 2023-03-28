@@ -1,6 +1,6 @@
 const express = require("express");
+require('express-async-errors');
 const path = require("path");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoDB = require("./config/mongoDB");
 
@@ -32,6 +32,7 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 // Set our api routes
 app.use("/api/auth", require("./routes/authentication"));
+app.use("/api/sauces", require("./routes/sauces"));
 
 app.use(errorHandler);
 
