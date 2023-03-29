@@ -9,6 +9,8 @@ services:
       - fullstack-network
     volumes:
       - ./frontend/src:/usr/src/app/src
+    stdin_open: true
+    tty: true
     depends_on:
       - backend
 
@@ -24,6 +26,8 @@ services:
       - fullstack-network
     env_file:
       - ./env/backend.env
+    volumes:
+      - ./backend/images:/usr/src/app/images
     depends_on:
       - database
 

@@ -10,12 +10,6 @@ RUN npm install
 
 COPY . .
 
-
 EXPOSE 4200
-
-ENV HOST = 0.0.0.0
-ENV PORT = 4200
-ENV PROXI_API=$PROXI_API
-
 
 CMD [ "npm", "start" ]
