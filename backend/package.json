@@ -18,7 +18,7 @@
   "author": "Bertrand Bouillon",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server.js localhost 3000",
     "watch": "nodemon server.js"
   },
   "dependencies": {

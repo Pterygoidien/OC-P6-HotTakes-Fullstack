@@ -1,32 +1,48 @@
-version: "3.8"
+version: "3"
 services:
-  database:
-    image: 'mongo'
-    restart: always
+  frontend:
+    build: ./frontend
     ports:
-      - '27017:27017'
+      - 4200:4200
+    container_name: frontend-service
+    networks:
+      - fullstack-network
     volumes:
-      - data:/data/db
-    env_file:
-      - ./env/mongo.env
+      - ./frontend/src:/usr/src/app/src
+    depends_on:
+      - backend
+
   backend:
     build: ./backend
     #  context: ./backend
     #  dockerfile: Dockerfile
     #  args:
     ports:
-      - '3000:3000'
+      - 3000:3000
+    container_name: backend-service
+    networks:
+      - fullstack-network
     env_file:
       - ./env/backend.env
     depends_on:
       - database
-  frontend:
-    build: ./frontend
+
+  database:
+    image: mongo
+    restart: always
+    container_name: mongodb-service
     ports:
-      - '4200:4200'
+      - 27017:27017
+    networks:
+      - fullstack-network
     volumes:
-      - ./frontend/src:/usr/src/app/src
-    depends_on:
-      - backend
+      - data:/data/db
+    env_file:
+      - ./env/mongo.env
+
+networks:
+  fullstack-network:
+    driver: bridge
+
 volumes:
   data:
