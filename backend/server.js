@@ -1,7 +1,6 @@
 //server.js s'occupe de lancer le serveur et importe app.js qui lui s'occupe de lancer l'application et de gérer la logique interne de l'application. 
 
 const http = require("http");
-const dotenv = require("dotenv").config('.env')
 const app = require("./app");
 
 const port = process.env.HOST_PORT || 3000;
