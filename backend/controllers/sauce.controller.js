@@ -89,7 +89,6 @@ const createSauce = asyncHandler(async (req, res) => {
     }
 })
 
-
 /**
  * @desc   Update a Sauce
  * @route  PUT /api/sauces/:id
@@ -110,7 +109,7 @@ const updateSauce = asyncHandler(async (req, res) => {
         message: "Cette sauce n'a pas été trouvée dans notre base de donnée. "
     })
     //Si il y a une nouvelle image, alors le format de req.body est différent : on a d'un côté l'object {sauce}, et l'autre {image}. Il faudra alors vérifier la présence d'un fichier envoyé via le multer
-    const sauceBody = req.file ? { ...JSON.parse(req.body.sauce), imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` } : { ...JSON.parse(req.body) };
+    const sauceBody = req.file ? { ...JSON.parse(req.body.sauce), imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` } : req.body;
     //On vérifie que l'utilisateur est bien le créateur de la sauce
     if (!req.user || sauce.userId.toString() !== req.user._id.toString()) return res.status(401).json({
         success: false,
@@ -141,7 +140,6 @@ const updateSauce = asyncHandler(async (req, res) => {
  * @param  {String} id
  * @return {Object} sauce
  * @todo   Delete image from server
- * 
  */
 const deleteSauce = asyncHandler(async (req, res) => {
     const sauce = await sauceService.getSauceById(req.params.id);
@@ -175,11 +173,52 @@ const deleteSauce = asyncHandler(async (req, res) => {
 
 })
 
+/**
+ * @desc   Like a Sauce
+ * @route  POST /api/sauces/:id/like
+ * @access Private
+ * @param  {String} userId
+ * @param  {Number} like
+ * @return {Object} sauce
+ */
+const likeSauce = asyncHandler(async (req, res) => {
+    const { like, userId } = req.body;
+    const { id: sauceId } = req.params;
+
+
+    const sauce = await sauceService.getSauceById(sauceId);
+    if (!sauce) return res.status(404).json({
+        success: false,
+        message: "Cette sauce n'a pas été trouvée dans notre base de donnée. "
+    })
+
+    if (!req.user) return res.status(401).json({
+        success: false,
+        message: "Vous devez être connecté pour liker cette sauce"
+    })
+
+    try {
+        const updatedSauce = await sauceService.likeSauce(userId, like, sauce);
+        res.status(200).json({
+            success: true,
+            message: "Sauce likée avec succès",
+            sauce
+        })
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Erreur serveur",
+            erreur: error
+        })
+    }
+})
 
 module.exports = {
     getAllSauces,
     getSauceById,
     createSauce,
     updateSauce,
-    deleteSauce
+    deleteSauce,
+    likeSauce
 }

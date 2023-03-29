@@ -52,6 +52,44 @@ const deleteSauce = async (id) => {
     }
 }
 
+const likeSauce = async (userId, like, sauce) => {
+    const userLiked = sauce.usersLiked;
+    const userDisliked = sauce.usersDisliked;
+
+    switch (like) {
+        case 1:
+            if (!userLiked.includes(userId)) {
+                userLiked.push(userId);
+            }
+            break;
+        case -1:
+            if (!userDisliked.includes(userId)) {
+                userDisliked.push(userId);
+            }
+            break;
+        case 0:
+            if (userLiked.includes(userId)) {
+                userLiked.splice(userLiked.indexOf(userId), 1);
+            }
+            if (userDisliked.includes(userId)) {
+                userDisliked.splice(userDisliked.indexOf(userId), 1);
+            }
+            break;
+        default:
+            throw { message: "Invalid request" };
+    }
+
+    try {
+        const updatedSauce = await Sauce.findByIdAndUpdate(sauce._id, { usersLiked: userLiked, usersDisliked: userDisliked }, { new: true });
+        return updatedSauce;
+    }
+    catch (error) {
+        throw error;
+    }
+
+
+}
+
 
 
 module.exports = {
@@ -59,7 +97,8 @@ module.exports = {
     getAllSauces,
     getSauceById,
     updateSauce,
-    deleteSauce
+    deleteSauce,
+    likeSauce
 
 
 }

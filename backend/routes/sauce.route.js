@@ -13,7 +13,7 @@ router.route('/:id')
     .get(sauceController.getSauceById)
     .put(multer, sauceController.updateSauce)
     .delete(sauceController.deleteSauce)
-//router.post('/:id/like', authGuard, sauceController.likeSauce)
+router.post('/:id/like', authGuard, sauceController.likeSauce)
 
 
 

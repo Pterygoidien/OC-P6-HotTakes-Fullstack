@@ -1,9 +1,11 @@
 node_modules
 volumes
-env
 .env
-.angular
 .dockerignore
+env
+.angular
+backend/images
+
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
